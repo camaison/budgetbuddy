@@ -18,11 +18,6 @@ class Bottom extends StatefulWidget {
 class _BottomState extends State<Bottom> {
   int index_color = 0;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   List Screen = [
     const Home(),
     const Statistics(),
@@ -45,11 +40,11 @@ class _BottomState extends State<Bottom> {
           );
         },
         child: const Icon(Icons.add),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: const Color(0xFFF4B860),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        color: Colors.black.withOpacity(0.3),
+        color: Colors.grey.withOpacity(0.05),
         shape: const CircularNotchedRectangle(),
         child: Padding(
           padding: const EdgeInsets.only(top: 7.5, bottom: 7.5),
@@ -65,7 +60,9 @@ class _BottomState extends State<Bottom> {
                 child: Icon(
                   Icons.home,
                   size: 30,
-                  color: index_color == 0 ? Colors.orangeAccent : Colors.grey,
+                  color: index_color == 0
+                      ? const Color(0xFFF4B860)
+                      : const Color(0xFF4A5859),
                 ),
               ),
               GestureDetector(
@@ -77,7 +74,9 @@ class _BottomState extends State<Bottom> {
                 child: Icon(
                   Icons.bar_chart_outlined,
                   size: 30,
-                  color: index_color == 1 ? Colors.orangeAccent : Colors.grey,
+                  color: index_color == 1
+                      ? const Color(0xFFF4B860)
+                      : const Color(0xFF4A5859),
                 ),
               ),
               const SizedBox(width: 10),
@@ -90,7 +89,9 @@ class _BottomState extends State<Bottom> {
                 child: Icon(
                   Icons.account_balance_wallet_outlined,
                   size: 30,
-                  color: index_color == 2 ? Colors.orangeAccent : Colors.grey,
+                  color: index_color == 2
+                      ? const Color(0xFFF4B860)
+                      : const Color(0xFF4A5859),
                 ),
               ),
               GestureDetector(
@@ -102,7 +103,9 @@ class _BottomState extends State<Bottom> {
                 child: Icon(
                   Icons.person_outlined,
                   size: 30,
-                  color: index_color == 3 ? Colors.orangeAccent : Colors.grey,
+                  color: index_color == 3
+                      ? const Color(0xFFF4B860)
+                      : const Color(0xFF4A5859),
                 ),
               ),
             ],

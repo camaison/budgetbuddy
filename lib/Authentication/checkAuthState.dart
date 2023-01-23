@@ -13,6 +13,8 @@ class CheckAuth extends StatefulWidget {
 }
 
 class _CheckAuthState extends State<CheckAuth> {
+  bool loading = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +30,7 @@ class _CheckAuthState extends State<CheckAuth> {
             );
             RefactorInactiveBudgets();
             WeekManager.checkWeek();
+
             return const Bottom();
           } else {
             const SnackBar(

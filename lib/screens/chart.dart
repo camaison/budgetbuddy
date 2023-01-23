@@ -38,7 +38,7 @@ class _ChartState extends State<Chart> {
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4)),
-                        color: const Color(0xFF4A5859).withOpacity(0.1),
+                        color: const Color(0xFF4A5859).withOpacity(0.2),
                         child: barChart(graphData: graphData['thisWeek']),
                       )),
                   const SizedBox(height: 20),
@@ -51,13 +51,14 @@ class _ChartState extends State<Chart> {
                           "This Week's Transactions",
                           style: TextStyle(
                               color: Colors.grey,
-                              fontSize: 16,
+                              fontSize: 17,
                               fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                   ),
-                  weekTransactions != null
+                  const SizedBox(height: 10),
+                  weekTransactions != null || weekTransactions.isNotEmpty
                       ? SizedBox(
                           height: 365,
                           child: Scrollbar(
@@ -85,9 +86,9 @@ class _ChartState extends State<Chart> {
                                   );
                                 }),
                           ))
-                      : SizedBox(
+                      : const SizedBox(
                           height: 200,
-                          child: const Center(
+                          child: Center(
                               child: Text(
                             "No Transactions",
                             style: TextStyle(
@@ -296,7 +297,7 @@ class _barChartState extends State<barChart> {
                   ),
                   const Text(
                     'Transaction',
-                    style: TextStyle(color: Colors.white, fontSize: 22),
+                    style: TextStyle(color: Colors.grey, fontSize: 22),
                   ),
                   const SizedBox(
                     width: 4,
@@ -468,7 +469,7 @@ class _barChartState extends State<barChart> {
                 TextSpan(
                   text: (rod.toY).toString(),
                   style: const TextStyle(
-                    color: Colors.orangeAccent,
+                    color: const Color(0xFFF4B860),
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -552,7 +553,7 @@ class _barChartState extends State<barChart> {
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: Colors.orangeAccent.withOpacity(0.15),
+            color: const Color(0xFFF4B860).withOpacity(0.15),
             strokeWidth: 1,
           );
         },
@@ -692,7 +693,7 @@ class _barChartState extends State<barChart> {
                 TextSpan(
                   text: (rod.toY).toString(),
                   style: const TextStyle(
-                    color: Colors.orangeAccent,
+                    color: const Color(0xFFF4B860),
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -776,7 +777,7 @@ class _barChartState extends State<barChart> {
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: Colors.orangeAccent.withOpacity(0.15),
+            color: const Color(0xFFF4B860).withOpacity(0.15),
             strokeWidth: 1,
           );
         },
@@ -864,7 +865,7 @@ class _barChartState extends State<barChart> {
                 TextSpan(
                   text: (rod.toY).toString(),
                   style: const TextStyle(
-                    color: Colors.orangeAccent,
+                    color: const Color(0xFFF4B860),
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -948,7 +949,7 @@ class _barChartState extends State<barChart> {
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: Colors.orangeAccent.withOpacity(0.15),
+            color: const Color(0xFFF4B860).withOpacity(0.15),
             strokeWidth: 1,
           );
         },
@@ -992,37 +993,37 @@ class _barChartState extends State<barChart> {
             String income;
             String expense;
             switch (group.x) {
-              case 0:
+              case 1:
                 text = 'Monday';
                 income = graphData['0']['income'];
                 expense = graphData['0']['expense'];
                 break;
-              case 1:
+              case 2:
                 text = 'Tuesday';
                 income = graphData['1']['income'];
                 expense = graphData['1']['expense'];
                 break;
-              case 2:
+              case 3:
                 text = 'Wednesday';
                 income = graphData['2']['income'];
                 expense = graphData['2']['expense'];
                 break;
-              case 3:
+              case 4:
                 text = 'Thursday';
                 income = graphData['3']['income'];
                 expense = graphData['3']['expense'];
                 break;
-              case 4:
+              case 5:
                 text = 'Friday';
                 income = graphData['4']['income'];
                 expense = graphData['4']['expense'];
                 break;
-              case 5:
+              case 6:
                 text = 'Saturday';
                 income = graphData['5']['income'];
                 expense = graphData['5']['expense'];
                 break;
-              case 6:
+              case 7:
                 text = 'Sunday';
                 income = graphData['6']['income'];
                 expense = graphData['6']['expense'];
@@ -1056,7 +1057,7 @@ class _barChartState extends State<barChart> {
                 TextSpan(
                   text: (rod.toY).toString(),
                   style: const TextStyle(
-                    color: Colors.orangeAccent,
+                    color: const Color(0xFFF4B860),
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -1140,7 +1141,7 @@ class _barChartState extends State<barChart> {
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: Colors.orangeAccent.withOpacity(0.15),
+            color: const Color(0xFFF4B860).withOpacity(0.15),
             strokeWidth: 1,
           );
         },

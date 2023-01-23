@@ -66,9 +66,10 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
+              const Color(0xFFF4B860).withOpacity(0.3),
+
               const Color(0xFF4A5859).withOpacity(0.3),
               //Color(0xFFC83E4D).withOpacity(0.1),
-              const Color(0xFFF4B860).withOpacity(0.1)
             ],
           ),
         ),
@@ -81,7 +82,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
               children: [
                 Container(
                   decoration:
-                      BoxDecoration(color: Colors.orangeAccent, boxShadow: [
+                      BoxDecoration(color: const Color(0xFFF4B860), boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.01),
                       spreadRadius: 10,
@@ -160,7 +161,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                               border: Border.all(
                                   width: 2,
                                   color: activeCategory == index
-                                      ? Colors.orangeAccent
+                                      ? const Color(0xFFF4B860)
                                       : Colors.transparent),
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
@@ -293,6 +294,11 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                               _title = input.toString();
                             },
                           ),
+                          Container(
+                            width: double.infinity,
+                            height: 1.0,
+                            color: Colors.grey[400],
+                          ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -338,7 +344,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                                   width: 50,
                                   height: 50,
                                   decoration: BoxDecoration(
-                                      color: Colors.orangeAccent,
+                                      color: const Color(0xFFF4B860),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: IconButton(
                                     onPressed: () {

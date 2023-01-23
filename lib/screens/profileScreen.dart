@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:budgetbuddy/Theme/constants.dart';
+import 'package:budgetbuddy/functions/sortData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +13,68 @@ class ProfileScreen extends StatelessWidget {
   late double expense;
 
   ProfileScreen({super.key});
+  static late String name = '';
+  static late String email = '';
+
+  Widget ProfilePic() {
+    String picUrl = '';
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .get()
+            .asStream(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const SnackBar(
+                content: Text('Something went wrong'),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 3),
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))));
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: Shimmer(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color(0xFFF4B860).withOpacity(0.3),
+
+                  const Color(0xFF4A5859).withOpacity(0.3),
+                  // Colors.orangeAccent.withOpacity(0.2),
+                  // Colors.grey.withOpacity(0.1),
+                ],
+              ),
+              child: Container(
+                color: Colors.transparent,
+                height: kSpacingUnit.w * 10,
+                width: kSpacingUnit.w * 10,
+                child: const CircleAvatar(
+                  radius: 15,
+                ),
+              ),
+            ));
+          }
+          Map data = snapshot.data!.data() as Map;
+          picUrl = data['picURL'];
+
+          return CircleAvatar(
+            radius: kSpacingUnit.w * 4.5,
+            backgroundImage: picUrl == ''
+                ? const AssetImage('assets/images/placeholder.jpg')
+                    as ImageProvider
+                : NetworkImage(snapshot.data!['picURL']),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
-    late String picUrl;
-    late String name;
-    late String email;
-
     ScreenUtil.init(context,
         designSize: const Size(414, 896), minTextAdapt: true);
     var profileInfo = Expanded(
@@ -58,15 +114,13 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                     child: Container(
+                      color: Colors.transparent,
                       height: kSpacingUnit.w * 10,
                       width: kSpacingUnit.w * 10,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/Test.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      child: const CircleAvatar(
+                          radius: 15,
+                          backgroundImage:
+                              AssetImage('assets/images/placeholder.jpg')),
                     ),
                   ));
                 }
@@ -102,11 +156,7 @@ class ProfileScreen extends StatelessWidget {
                             lineWidth: 6.0,
                             percent: percent,
                             progressColor: progressColor,
-                            center: CircleAvatar(
-                              radius: kSpacingUnit.w * 4.5,
-                              backgroundImage:
-                                  const AssetImage('assets/images/Test.jpg'),
-                            ),
+                            center: ProfilePic(),
                           ),
                         )
                       ],
@@ -239,9 +289,10 @@ class ProfileScreen extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
+                const Color(0xFFF4B860).withOpacity(0.2),
+
                 const Color(0xFF4A5859).withOpacity(0.3),
                 //Color(0xFFC83E4D).withOpacity(0.1),
-                const Color(0xFFF4B860).withOpacity(0.1)
               ],
             ),
           ),
@@ -255,7 +306,7 @@ class ProfileScreen extends StatelessWidget {
                 header,
                 SizedBox(height: kSpacingUnit.w * 2),
                 Text(
-                  "Cyprian Maison",
+                  name,
                   style: kTitleTextStyle.copyWith(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -263,7 +314,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 SizedBox(height: kSpacingUnit.w * 0.5),
                 Text(
-                  "test@budgetbuddy.com",
+                  email,
                   style: kCaptionTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
@@ -382,7 +433,10 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 GestureDetector(
-                  onTap: FirebaseAuth.instance.signOut,
+                  onTap: () {
+                    SortData.allData = {};
+                    FirebaseAuth.instance.signOut();
+                  },
                   child: Container(
                     height: kSpacingUnit.w * 5.5,
                     margin: EdgeInsets.symmetric(

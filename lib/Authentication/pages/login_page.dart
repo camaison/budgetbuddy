@@ -47,9 +47,9 @@ class _LoginPageState extends State<LoginPage>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFFF4B860).withOpacity(0.2),
-                const Color(0xFFC83E4D).withOpacity(0.3),
-                const Color(0xFF4A5859).withOpacity(0.1),
+                const Color(0xFFF4B860).withOpacity(0.3),
+                const Color(0xFF4A5859).withOpacity(0.3),
+                //const Color(0xFFC83E4D).withOpacity(0.1),
               ],
             ),
           ),

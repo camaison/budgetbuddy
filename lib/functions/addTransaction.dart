@@ -18,7 +18,11 @@ class AddTransaction {
       "${ConvertDateTime(DateTime.now()).getDateNumbers()} ; ${ConvertDateTime(DateTime.now()).getTime()}";
 
   AddTransaction(
-      this.title, this.amount, this.isIncome, this.dateTime, this.category) {
+      {required this.title,
+      required this.amount,
+      required this.isIncome,
+      required this.dateTime,
+      required this.category}) {
     WeekManager.checkWeek();
     RefactorInactiveBudgets();
     addTransaction();
@@ -152,7 +156,11 @@ class AddTransaction {
                     label: "Retry",
                     onPressed: () {
                       AddTransaction(
-                          title, amount, isIncome, dateTime, category);
+                          title: title,
+                          amount: amount,
+                          isIncome: isIncome,
+                          dateTime: dateTime,
+                          category: category);
                     },
                   )),
               print("Error: $error"),
@@ -170,33 +178,23 @@ class AddTransaction {
         .get()
         .then((value) => {
               value.docs.forEach((budget) {
-                if (budget.data()['Category'] == category ||
-                    budget.data()['Category'] == "General") {
+                if (budget['Category'] == category ||
+                    budget['Category'] == "General") {
                   // print("Found Category in Budget: ${budget.id}");
-                  if (budget.data()['Start Date'].toDate().isBefore(dateTime) &&
-                          budget
-                              .data()['End Date']
-                              .toDate()
-                              .isAfter(dateTime) ||
-                      budget.data()['Start Date'].toDate().isBefore(dateTime) &&
-                          budget
-                              .data()['End Date']
+                  if (budget['Start Date'].toDate().isBefore(dateTime) &&
+                          budget['End Date'].toDate().isAfter(dateTime) ||
+                      budget['Start Date'].toDate().isBefore(dateTime) &&
+                          budget['End Date']
                               .toDate()
                               .isAtSameMomentAs(dateTime) ||
-                      budget
-                              .data()['Start Date']
+                      budget['Start Date']
                               .toDate()
                               .isAtSameMomentAs(dateTime) &&
-                          budget
-                              .data()['End Date']
-                              .toDate()
-                              .isAfter(dateTime) ||
-                      budget
-                              .data()['Start Date']
+                          budget['End Date'].toDate().isAfter(dateTime) ||
+                      budget['Start Date']
                               .toDate()
                               .isAtSameMomentAs(dateTime) &&
-                          budget
-                              .data()['End Date']
+                          budget['End Date']
                               .toDate()
                               .isAtSameMomentAs(dateTime)) {
                     //   print(
@@ -205,8 +203,7 @@ class AddTransaction {
                     //  print("Updating Budget: ${budget.id}");
                     budgets.collection("active").doc(budget.id).set({
                       'Current Amount': double.parse(
-                          (budget.data()['Current Amount'] +
-                                  double.parse(amount))
+                          (budget['Current Amount'] + double.parse(amount))
                               .toStringAsFixed(2)),
                       'Transactions': FieldValue.arrayUnion([
                         {transactionId: amount}

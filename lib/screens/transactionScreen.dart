@@ -24,7 +24,7 @@ class TransactionScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.orangeAccent,
+          backgroundColor: const Color(0xFFF4B860),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             color: Colors.white,

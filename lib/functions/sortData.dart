@@ -21,7 +21,12 @@ class SortData {
   static String monthHint = 'Month';
   static String yearHint = 'Year';
   static bool isYear = false;
+  static List dayKeys = [];
+
   SortData(this.snapshot) {
+    if ((snapshot.data?['recent']).length == 0) {
+      loading = false;
+    }
     List years = snapshot.data!['years'];
     if (allData.isEmpty || recentData.isEmpty) {
       recentData = snapshot.data!['recent'];
@@ -41,6 +46,10 @@ class SortData {
       loading = false;
     }
     yearMenu = ["Year", ...years];
+
+    print({
+      "Current Year: $currentYear, Current Month: $currentMonthIndex, Current Day: $currentDay"
+    });
   }
   static RecentTransactions() {
     List recent = [];
@@ -93,7 +102,7 @@ class SortData {
     });
 
     if (isYear) {
-      allTransactions = SortData.yearData;
+      allTransactions = allTransactions;
     }
     if (isDisplayIncome) {
       return allTransactionsIncome;
@@ -112,12 +121,11 @@ class SortData {
     List dayTransactions = [];
     List dayTransactionsIncome = [];
     List dayTransactionsExpense = [];
-
     index == 0
         ? val = []
         : {
             month = allData[currentYear].keys.toList()[currentMonthIndex - 1],
-            day = allData[currentYear][month].keys.toList()[index - 1],
+            day = dayKeys[index - 1],
             if (allData[currentYear][month][day] == null)
               {
                 dayData = [],
@@ -148,7 +156,7 @@ class SortData {
                   return b[1]['Date'].compareTo(a[1]['Date']);
                 }),
               },
-            val = [dayData],
+            val = [dayData, []],
           };
     return val;
   }
@@ -166,11 +174,11 @@ class SortData {
         : {
             month =
                 allData[currentYear].keys.toList()[sortYear()[1][index][1] - 1],
-            for (int i = 0;
-                i < allData[currentYear][month].keys.toList().length;
-                i++)
+            dayKeys = allData[currentYear][month].keys.toList(),
+            dayKeys.sort((a, b) => a.compareTo(b)),
+            for (int i = 0; i < dayKeys.length; i++)
               {
-                days.add([allData[currentYear][month].keys.toList()[i], i + 1]),
+                days.add([dayKeys[i], i + 1]),
               },
             if (allData[currentYear][month] == null)
               {
@@ -204,6 +212,9 @@ class SortData {
                   return b[1]['Date'].compareTo(a[1]['Date']);
                 }),
               },
+            days.sort((a, b) {
+              return a[0].compareTo(b[0]);
+            }),
             val = [
               monthData,
               [
@@ -222,14 +233,16 @@ class SortData {
     List yearTransactionsIncome = [];
     List yearTransactionsExpense = [];
     List monthWords = [];
+    List months = [];
     currentYear == ''
         ? val = []
         : {
-            for (int i = 0; i < allData[year].keys.toList().length; i++)
+            months = allData[year].keys.toList(),
+            months.sort((a, b) => a.compareTo(b)),
+            for (int i = 0; i < months.length; i++)
               {
                 monthWords.add([
-                  ConvertDateTime.convertMonth(
-                      int.parse(allData[year].keys.toList()[i])),
+                  ConvertDateTime.convertMonth(int.parse(months[i])),
                   i + 1
                 ]),
               },

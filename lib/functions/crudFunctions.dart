@@ -56,13 +56,15 @@ class RefactorInactiveBudgets {
 class InitDatabase {
   final String name;
   final String email;
-  final File pic;
+  final String location;
   final User? user;
+  final UserCredential credential;
   InitDatabase(
       {required this.name,
       required this.email,
-      required this.pic,
-      required this.user}) {
+      required this.location,
+      required this.user,
+      required this.credential}) {
     init();
   }
 
@@ -74,10 +76,10 @@ class InitDatabase {
         WeekManager.getDate(date.subtract(Duration(days: date.weekday - 1)));
     String fileName = user!.uid;
     late String profilPicURL = '';
-    if (pic != File('assets/images/placeholder.jpg')) {
+    if (location != '') {
       final firebaseStorageRef =
           FirebaseStorage.instance.ref().child('profilePictures/$fileName');
-      await firebaseStorageRef.putFile(pic).then((val) async {
+      await firebaseStorageRef.putFile(File(location)).then((val) async {
         profilPicURL = await firebaseStorageRef.getDownloadURL();
       });
     }
@@ -87,41 +89,42 @@ class InitDatabase {
       'email': email,
       'picURL': profilPicURL,
       "id": user!.uid,
-    }).then((value) => {
-          print("User Document Created!"),
-        });
+    }).then((value) async {
+      print("User Collection Created!");
+      await FirebaseFirestore.instance
+          .collection(user!.uid)
+          .doc('statistics')
+          .set({
+        'start': startOfWeek,
+        'end': endOfWeek,
+        'thisWeek': {
+          '1': {'income': '0', 'expense': '0'},
+          '2': {'income': '0', 'expense': '0'},
+          '3': {'income': '0', 'expense': '0'},
+          '4': {'income': '0', 'expense': '0'},
+          '5': {'income': '0', 'expense': '0'},
+          '6': {'income': '0', 'expense': '0'},
+          '7': {'income': '0', 'expense': '0'},
+        },
+      });
+    }).then((value) async {
+      print("Statistics Collection Created!");
 
-    await FirebaseFirestore.instance
-        .collection(user!.uid)
-        .doc('statistics')
-        .set({
-      'start': startOfWeek,
-      'end': endOfWeek,
-      'thisWeek': {
-        '1': {'income': '0', 'expense': '0'},
-        '2': {'income': '0', 'expense': '0'},
-        '3': {'income': '0', 'expense': '0'},
-        '4': {'income': '0', 'expense': '0'},
-        '5': {'income': '0', 'expense': '0'},
-        '6': {'income': '0', 'expense': '0'},
-        '7': {'income': '0', 'expense': '0'},
-      },
-    }).then((value) => {
-              print("Statistics Collection Created!"),
-            });
-
-    await FirebaseFirestore.instance
-        .collection(user!.uid)
-        .doc('transactions')
-        .set({
-      'score': 0,
-      'recent': [],
-      'years': [],
-      'income': 0,
-      'expense': 0,
-    }).then((value) => {
-              print("Transactions Collection Created!"),
-            });
+      await FirebaseFirestore.instance
+          .collection(user!.uid)
+          .doc('transactions')
+          .set({
+        'score': 0,
+        'recent': [],
+        'years': [],
+        'income': 0,
+        'expense': 0,
+      }).then((value) => {
+                print("Transactions Collection Created!"),
+              });
+    }).then((value) {
+      return credential;
+    });
   }
 }
 

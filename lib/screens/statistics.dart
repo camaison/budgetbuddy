@@ -12,8 +12,6 @@ class Statistics extends StatefulWidget {
 ValueNotifier kj = ValueNotifier(0);
 
 class _StatisticsState extends State<Statistics> {
-  int index_color = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,9 +23,9 @@ class _StatisticsState extends State<Statistics> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
+                const Color(0xFFF4B860).withOpacity(0.2),
                 const Color(0xFF4A5859).withOpacity(0.3),
                 //Color(0xFFC83E4D).withOpacity(0.1),
-                const Color(0xFFF4B860).withOpacity(0.1)
               ],
             ),
           ),
@@ -51,7 +49,7 @@ class _StatisticsState extends State<Statistics> {
   custom() {
     return Column(children: [
       Container(
-        decoration: BoxDecoration(color: Colors.orangeAccent, boxShadow: [
+        decoration: BoxDecoration(color: Color(0xFFF4B860), boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.01),
             spreadRadius: 10,

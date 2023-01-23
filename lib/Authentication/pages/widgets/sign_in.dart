@@ -152,31 +152,21 @@ class _SignInState extends State<SignIn> {
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 170.0),
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(5.0)),
-                      boxShadow: const <BoxShadow>[
-                        BoxShadow(
-                          color: CustomTheme.loginGradientStart,
-                          offset: Offset(1.0, 6.0),
-                          blurRadius: 20.0,
-                        ),
-                        BoxShadow(
-                          color: CustomTheme.loginGradientEnd,
-                          offset: Offset(1.0, 6.0),
-                          blurRadius: 35.0,
-                        ),
-                      ],
-                      gradient: LinearGradient(
-                          colors: <Color>[
-                            const Color(0xFFC83E4D).withOpacity(0.6),
-                            const Color(0xFFF4B860).withOpacity(0.5),
-                            // Color(0xFF4A5859).withOpacity(0.1),
-                          ],
-                          begin: const FractionalOffset(0.2, 0.2),
-                          end: const FractionalOffset(1.0, 1.0),
-                          stops: const <double>[0.0, 1.0],
-                          tileMode: TileMode.clamp)),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFfe7102),
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    boxShadow: <BoxShadow>[],
+                    // gradient: LinearGradient(
+                    //     colors: <Color>[
+                    //       const Color(0xFFC83E4D).withOpacity(0.6),
+                    //       const Color(0xFFF4B860).withOpacity(0.5),
+                    //       // Color(0xFF4A5859).withOpacity(0.1),
+                    //     ],
+                    //     begin: const FractionalOffset(0.2, 0.2),
+                    //     end: const FractionalOffset(1.0, 1.0),
+                    //     stops: const <double>[0.0, 1.0],
+                    //     tileMode: TileMode.clamp)
+                  ),
                   child: MaterialButton(
                       highlightColor: Colors.transparent,
                       splashColor: CustomTheme.loginGradientEnd,

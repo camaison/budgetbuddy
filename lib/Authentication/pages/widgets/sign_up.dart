@@ -27,7 +27,7 @@ class _SignUpState extends State<SignUp> {
   late String signupName;
   late String signupPassword;
   late String signupConfirmPassword;
-  File _imageFile = File('assets/images/placeholder.jpg');
+  String location = '';
 
   DecorationImage _image = const DecorationImage(
     image: AssetImage('assets/images/placeholder.jpg'),
@@ -86,9 +86,9 @@ class _SignUpState extends State<SignUp> {
                                     (value) {
                                       if (value != null) {
                                         setState(() {
-                                          _imageFile = File(value.path);
+                                          location = value.path;
                                           _image = DecorationImage(
-                                            image: FileImage(_imageFile),
+                                            image: FileImage(File(value.path)),
                                             fit: BoxFit.cover,
                                           );
                                         });
@@ -319,19 +319,9 @@ class _SignUpState extends State<SignUp> {
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 350.0),
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(5.0)),
-                      gradient: LinearGradient(
-                          colors: <Color>[
-                            const Color(0xFFC83E4D).withOpacity(0.6),
-                            const Color(0xFFF4B860).withOpacity(0.5),
-                            // Color(0xFF4A5859).withOpacity(0.1),
-                          ],
-                          begin: const FractionalOffset(0.2, 0.2),
-                          end: const FractionalOffset(1.0, 1.0),
-                          stops: const <double>[0.0, 1.0],
-                          tileMode: TileMode.clamp)),
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      color: Color(0xFFfe7102)),
                   child: MaterialButton(
                     highlightColor: Colors.transparent,
                     splashColor: CustomTheme.loginGradientEnd,
@@ -367,7 +357,7 @@ class _SignUpState extends State<SignUp> {
           email: signupEmail,
           password: signupPassword,
           name: signupName,
-          pic: _imageFile);
+          location: location);
     } else {
       CustomSnackBar(context, const Text('Sign Up Failed'),
           backgroundColor: Colors.red);

@@ -33,6 +33,7 @@ class _AddNewState extends State<AddNew> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(
@@ -64,9 +65,9 @@ class _AddNewState extends State<AddNew> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    const Color(0xFF4A5859).withOpacity(0.3),
                     //Color(0xFFC83E4D).withOpacity(0.1),
-                    const Color(0xFFF4B860).withOpacity(0.1)
+                    const Color(0xFFF4B860).withOpacity(0.2),
+                    const Color(0xFF4A5859).withOpacity(0.3),
                   ],
                 ),
               ),
@@ -132,7 +133,8 @@ class _AddNewState extends State<AddNew> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            decoration: BoxDecoration(color: Colors.orangeAccent, boxShadow: [
+            decoration:
+                BoxDecoration(color: const Color(0xFFF4B860), boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.01),
                 spreadRadius: 10,
@@ -166,9 +168,10 @@ class _AddNewState extends State<AddNew> {
             child: Text(
               "Choose Category",
               style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
             ),
           ),
           const SizedBox(
@@ -195,11 +198,11 @@ class _AddNewState extends State<AddNew> {
                     width: 150,
                     height: 170,
                     decoration: BoxDecoration(
-                        color: const Color(0xFF4A5859).withOpacity(0.1),
+                        color: Colors.grey.withOpacity(0.1),
                         border: Border.all(
                             width: 2,
                             color: activeCategoryBudgets == index
-                                ? Colors.orangeAccent
+                                ? const Color(0xFFF4B860)
                                 : Colors.transparent),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
@@ -261,7 +264,7 @@ class _AddNewState extends State<AddNew> {
                       style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xff67727d)),
+                          color: Colors.grey),
                     ),
                     Container(
                       alignment: Alignment.bottomLeft,
@@ -301,6 +304,8 @@ class _AddNewState extends State<AddNew> {
                         ),
                       ),
                     ),
+                    Container(
+                        color: Colors.white, height: 1, width: double.infinity),
                     const SizedBox(
                       height: 20,
                     ),
@@ -309,7 +314,7 @@ class _AddNewState extends State<AddNew> {
                       style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xff67727d)),
+                          color: Colors.grey),
                     ),
                     TextFormField(
                       cursorColor: Colors.white,
@@ -326,6 +331,8 @@ class _AddNewState extends State<AddNew> {
                         _title = input.toString();
                       },
                     ),
+                    Container(
+                        color: Colors.white, height: 1, width: double.infinity),
                     const SizedBox(
                       height: 20,
                     ),
@@ -342,7 +349,7 @@ class _AddNewState extends State<AddNew> {
                                 style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xff67727d)),
+                                    color: Colors.grey),
                               ),
                               TextFormField(
                                 cursorColor: Colors.white,
@@ -374,7 +381,7 @@ class _AddNewState extends State<AddNew> {
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                                color: Colors.orangeAccent,
+                                color: const Color(0xFFF4B860),
                                 borderRadius: BorderRadius.circular(15)),
                             child: IconButton(
                               onPressed: () {
@@ -412,7 +419,7 @@ class _AddNewState extends State<AddNew> {
         children: [
           Container(
             decoration:
-                const BoxDecoration(color: Colors.orangeAccent, boxShadow: [
+                const BoxDecoration(color: const Color(0xFFF4B860), boxShadow: [
               BoxShadow(
                 color: Colors.transparent,
                 spreadRadius: 10,
@@ -446,7 +453,7 @@ class _AddNewState extends State<AddNew> {
             child: Text(
               "Choose Category",
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey),
             ),
@@ -475,11 +482,11 @@ class _AddNewState extends State<AddNew> {
                     width: 150,
                     height: 170,
                     decoration: BoxDecoration(
-                        color: const Color(0xFF4A5859).withOpacity(0.1),
+                        color: Colors.grey.withOpacity(0.1),
                         border: Border.all(
                             width: 2,
                             color: activeCategoryTransactions == index
-                                ? Colors.orange
+                                ? const Color(0xFFF4B860)
                                 : Colors.transparent),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
@@ -541,7 +548,7 @@ class _AddNewState extends State<AddNew> {
                       style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xff67727d)),
+                          color: Colors.grey),
                     ),
                     const SizedBox(
                       height: 15,
@@ -625,7 +632,7 @@ class _AddNewState extends State<AddNew> {
                       style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xff67727d)),
+                          color: Colors.grey),
                     ),
                     TextFormField(
                       cursorColor: Colors.white,
@@ -641,6 +648,11 @@ class _AddNewState extends State<AddNew> {
                       onSaved: (String? input) {
                         _title = input.toString();
                       },
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 1.0,
+                      color: Colors.grey[400],
                     ),
                     const SizedBox(
                       height: 20,
@@ -658,7 +670,7 @@ class _AddNewState extends State<AddNew> {
                                 style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xff67727d)),
+                                    color: Colors.grey),
                               ),
                               TextFormField(
                                 cursorColor: Colors.black,
@@ -690,7 +702,7 @@ class _AddNewState extends State<AddNew> {
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                                color: Colors.orangeAccent,
+                                color: const Color(0xFFF4B860),
                                 borderRadius: BorderRadius.circular(15)),
                             child: IconButton(
                               onPressed: () {
@@ -699,11 +711,11 @@ class _AddNewState extends State<AddNew> {
                                 }
                                 _transactionKey.currentState!.save();
                                 AddTransaction(
-                                  _title,
-                                  _amount,
-                                  _isIncome,
-                                  _dateTime,
-                                  transactionCategories[
+                                  title: _title,
+                                  amount: _amount,
+                                  dateTime: _dateTime,
+                                  isIncome: _isIncome,
+                                  category: transactionCategories[
                                       activeCategoryTransactions]['name'],
                                 );
                                 _transactionKey.currentState!.reset();

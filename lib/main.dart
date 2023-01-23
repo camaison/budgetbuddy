@@ -1,4 +1,5 @@
 import 'package:budgetbuddy/Authentication/checkAuthState.dart';
+import 'package:budgetbuddy/functions/sortData.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  print(SortData.allData);
   runApp(
     const MyApp(),
   );

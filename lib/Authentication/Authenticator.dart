@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:budgetbuddy/Authentication/widgets/snackbar.dart';
 import 'package:budgetbuddy/functions/crudFunctions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,8 +8,9 @@ class Authenticate {
   final String name = '';
   final String email = '';
   final String password = '';
-  final File pic = File('');
+  final String location = '';
   late final BuildContext context;
+
   Future login(context, email, password) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
@@ -32,21 +32,19 @@ class Authenticate {
     }
   }
 
-  Future signUp({context, email, password, name, pic}) async {
+  Future signUp({context, email, password, name, location}) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user;
-      InitDatabase(
-        name: name,
-        email: email,
-        user: user,
-        pic: pic,
-      );
-      CustomSnackBar(
-          context, const Text('Account created successfully! Loading...'),
-          backgroundColor: Colors.green);
-      return userCredential;
+      CustomSnackBar(context, const Text('Initializing Database...'),
+          backgroundColor: Colors.orange);
+      return InitDatabase(
+          name: name,
+          email: email,
+          user: user,
+          location: location,
+          credential: userCredential);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         CustomSnackBar(
