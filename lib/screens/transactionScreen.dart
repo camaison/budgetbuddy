@@ -78,8 +78,14 @@ class TransactionScreen extends StatelessWidget {
                                         color: Colors.white, fontSize: 18))),
                             TextButton(
                                 onPressed: () {
-                                  DeleteTransaction(transactionId, money,
-                                      isIncome, dateTime, category, null);
+                                  DeleteTransaction(
+                                      id: transactionId,
+                                      amount: money,
+                                      isIncome: isIncome,
+                                      dateTime: dateTime,
+                                      category: category,
+                                      init: null);
+
                                   Navigator.pop(context);
                                 },
                                 child: const Text(

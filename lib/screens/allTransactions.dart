@@ -353,19 +353,25 @@ class _AllTransactionsState extends State<AllTransactions> {
                                                       }).toList(),
                                                       onChanged: (value) {
                                                         setState(() {
-                                                          print(dayMenu);
-                                                          SortData.index = 3;
-                                                          value == 0
-                                                              ? SortData.index =
-                                                                  3
-                                                              : SortData
-                                                                      .dayHint =
-                                                                  dayMenu[value
-                                                                      as int][0];
                                                           SortData.currentDay =
-                                                              value as int;
-                                                          SortData.index = 4;
-                                                          SortData.sortDay();
+                                                              0;
+                                                          SortData.dayHint =
+                                                              'Day';
+                                                          SortData.index = 3;
+                                                          if (value as int >
+                                                              0) {
+                                                            setState(() {
+                                                              SortData.dayHint =
+                                                                  dayMenu[value]
+                                                                      [0];
+                                                              SortData.currentDay =
+                                                                  value;
+                                                              SortData.index =
+                                                                  4;
+                                                              SortData
+                                                                  .sortDay();
+                                                            });
+                                                          }
                                                         });
                                                       },
                                                     )

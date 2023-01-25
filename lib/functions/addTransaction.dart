@@ -117,22 +117,95 @@ class AddTransaction {
                   {'recent': recentQueue.toList()}, SetOptions(merge: true)),
             },
         });
-    SortData.allData.addAll({
-      dateTime.year.toString(): {
-        dateTime.month.toString(): {
-          dateTime.day.toString(): {
-            transactionId: {
-              'Title': title,
-              'Amount': amount,
-              'isIncome': isIncome,
-              'Date': Timestamp.fromDate(dateTime),
-              'Category': category,
-              'Date Added': Timestamp.fromDate(DateTime.now()),
+    Map cachedData = SortData.allData;
+
+    if (cachedData.isNotEmpty) {
+      bool yearAccessed = false;
+
+      cachedData.forEach((year, value) {
+        if (dateTime.year.toString() == year) {
+          yearAccessed = true;
+          bool monthAccessed = false;
+
+          cachedData[year].forEach((month, value) {
+            if (dateTime.month.toString() == month) {
+              monthAccessed = true;
+              bool dayAccessed = false;
+
+              cachedData[year][month].forEach((day, value) {
+                if (dateTime.day.toString() == day) {
+                  dayAccessed = true;
+
+                  cachedData[year][month][day].addAll({
+                    transactionId: {
+                      'Title': title,
+                      'Amount': amount,
+                      'isIncome': isIncome,
+                      'Date': Timestamp.fromDate(dateTime),
+                      'Category': category,
+                      'Date Added': DateTime.now(),
+                    }
+                  });
+                }
+              });
+
+              if (!dayAccessed) {
+                cachedData[year][month].addAll({
+                  dateTime.day.toString(): {
+                    transactionId: {
+                      'Title': title,
+                      'Amount': amount,
+                      'isIncome': isIncome,
+                      'Date': Timestamp.fromDate(dateTime),
+                      'Category': category,
+                      'Date Added': DateTime.now(),
+                    }
+                  }
+                });
+              }
             }
+          });
+
+          if (!monthAccessed) {
+            cachedData[year].addAll({
+              dateTime.month.toString(): {
+                dateTime.day.toString(): {
+                  transactionId: {
+                    'Title': title,
+                    'Amount': amount,
+                    'isIncome': isIncome,
+                    'Date': Timestamp.fromDate(dateTime),
+                    'Category': category,
+                    'Date Added': DateTime.now(),
+                  }
+                }
+              }
+            });
           }
         }
+      });
+
+      if (!yearAccessed) {
+        cachedData.addAll({
+          dateTime.year.toString(): {
+            dateTime.month.toString(): {
+              dateTime.day.toString(): {
+                transactionId: {
+                  'Title': title,
+                  'Amount': amount,
+                  'isIncome': isIncome,
+                  'Date': Timestamp.fromDate(dateTime),
+                  'Category': category,
+                  'Date Added': DateTime.now(),
+                }
+              }
+            }
+          }
+        });
       }
-    });
+      SortData.allData = cachedData;
+    }
+
     transactions
         .collection(dateTime.year.toString())
         .doc(dateTime.month.toString())

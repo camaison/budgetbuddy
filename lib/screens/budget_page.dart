@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shimmer/shimmer.dart';
 
 //import 'package:flutter_icons/flutter_icons.dart';
 
@@ -117,6 +118,142 @@ class _BudgetPageState extends State<BudgetPage> {
     );
   }
 
+  Widget activeShimmer() {
+    return Expanded(
+        child: Shimmer(
+      //period: Duration(seconds: 1),
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          const Color(0xFFC83E4D).withOpacity(0.1),
+          const Color(0xFFF4B860).withOpacity(0.2),
+          const Color(0xFF4A5859).withOpacity(0.3),
+        ],
+      ),
+
+      child: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: const Color(0xFF4A5859).withOpacity(
+                                0.15), //Colors.black.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.01),
+                                spreadRadius: 10,
+                                blurRadius: 3,
+                                // changes position of shadow
+                              ),
+                            ]),
+                        child:
+                            // A list tile displaying budget title, current amount, limit, and percentage with progress bar
+                            Padding(
+                          padding: const EdgeInsets.only(
+                              left: 25, right: 25, bottom: 25, top: 25),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 15,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      height: 20,
+                                      width: 120,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 80,
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ]),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 20,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 3),
+                                    child: Container(
+                                      height: 20,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Stack(
+                                children: [
+                                  Container(
+                                    width: 600,
+                                    height: 5,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: const Color(0xff67727d)
+                                            .withOpacity(0.4)),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      )),
+                ],
+              ));
+        },
+      ),
+    ));
+  }
+
   Widget active() {
     var size = MediaQuery.of(context).size;
 
@@ -168,12 +305,8 @@ class _BudgetPageState extends State<BudgetPage> {
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return snapshot.data!.docs.length == 0
+                if (snapshot.hasData) {
+                  return snapshot.data!.docs.isEmpty
                       ? const Center(
                           child: Text('No Active Budgets',
                               style: TextStyle(
@@ -193,26 +326,26 @@ class _BudgetPageState extends State<BudgetPage> {
                                 padding:
                                     const EdgeInsets.only(left: 20, right: 20),
                                 child: GestureDetector(
-                                  onDoubleTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => UpdateBudgetScreen(
-                                                initialTitle: snapshot
-                                                    .data!.docs[index]['Title'],
-                                                initialLimit: snapshot
-                                                    .data!.docs[index]['Limit']
-                                                    .toString(),
-                                                initialEndTime:
-                                                    (snapshot.data!.docs[index]
-                                                            ['End Date'])
-                                                        .toDate(),
-                                                initialCategory: snapshot.data!
-                                                    .docs[index]['Category'],
-                                                initialTransactionId: snapshot
-                                                    .data!.docs[index].id
-                                                    .toString())));
-                                  },
+                                  // onDoubleTap: () {
+                                  //   Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //           builder: (context) => UpdateBudgetScreen(
+                                  //               initialTitle: snapshot
+                                  //                   .data!.docs[index]['Title'],
+                                  //               initialLimit: snapshot
+                                  //                   .data!.docs[index]['Limit']
+                                  //                   .toString(),
+                                  //               initialEndTime:
+                                  //                   (snapshot.data!.docs[index]
+                                  //                           ['End Date'])
+                                  //                       .toDate(),
+                                  //               initialCategory: snapshot.data!
+                                  //                   .docs[index]['Category'],
+                                  //               initialTransactionId: snapshot
+                                  //                   .data!.docs[index].id
+                                  //                   .toString())));
+                                  // },
                                   onLongPress: () {
                                     showDialog(
                                         context: context,
@@ -412,14 +545,22 @@ class _BudgetPageState extends State<BudgetPage> {
                                                       ),
                                                       Container(
                                                         width: (size.width -
-                                                                100) *
-                                                            snapshot.data!
-                                                                    .docs[index]
-                                                                [
-                                                                'Current Amount'] /
-                                                            snapshot.data!
-                                                                    .docs[index]
-                                                                ['Limit'],
+                                                                        100) *
+                                                                    snapshot.data!
+                                                                            .docs[index]
+                                                                        [
+                                                                        'Current Amount'] <
+                                                                0
+                                                            ? 1
+                                                            : (size.width -
+                                                                    100) *
+                                                                snapshot.data!
+                                                                            .docs[
+                                                                        index][
+                                                                    'Current Amount'] /
+                                                                snapshot.data!
+                                                                        .docs[index]
+                                                                    ['Limit'],
                                                         height: 5,
                                                         decoration:
                                                             BoxDecoration(
@@ -452,12 +593,89 @@ class _BudgetPageState extends State<BudgetPage> {
                           ),
                         );
                 }
+                return activeShimmer();
               },
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget historyShimmer() {
+    return Expanded(
+        child: Shimmer(
+            //period: Duration(seconds: 1),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color(0xFFC83E4D).withOpacity(0.1),
+                const Color(0xFFF4B860).withOpacity(0.2),
+                const Color(0xFF4A5859).withOpacity(0.3),
+              ],
+            ),
+            child: GridView.count(
+                crossAxisCount: 2,
+                children: List.generate(8, (index) {
+                  return Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, bottom: 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4A5859).withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 25, right: 25, top: 20, bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Center(
+                                child: RotatedBox(
+                                  quarterTurns: -4,
+                                  child: CircularPercentIndicator(
+                                    circularStrokeCap: CircularStrokeCap.round,
+                                    backgroundColor:
+                                        Colors.grey.withOpacity(0.3),
+                                    radius: 35,
+                                    lineWidth: 4,
+                                    percent: 0.6,
+                                    progressColor: Colors.grey,
+                                    center: Container(
+                                      height: 80,
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: 20,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              Container(
+                                height: 20,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ));
+                }))));
   }
 
   Widget history() {
@@ -483,8 +701,8 @@ class _BudgetPageState extends State<BudgetPage> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
+                    children: const [
+                      Text(
                         "History",
                         style: TextStyle(
                             fontSize: 20,
@@ -508,8 +726,8 @@ class _BudgetPageState extends State<BudgetPage> {
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                      return Center(
+                        child: historyShimmer(),
                       );
                     } else {
                       return snapshot.data!.docs.length == 0
@@ -783,7 +1001,6 @@ class _BudgetPageState extends State<BudgetPage> {
       ),
     );
   }
-}
 
 /*Container(
                     width: 400,
@@ -857,99 +1074,4 @@ class _BudgetPageState extends State<BudgetPage> {
         ],
       ),
     );*/
-
-class BudgetData extends StatelessWidget {
-  final AsyncSnapshot<QuerySnapshot> snapshot;
-  final int index;
-  final bool isActive;
-
-  const BudgetData(
-      {super.key,
-      required this.snapshot,
-      required this.index,
-      required this.isActive});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(children: [
-      Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              const Color(0xFF4A5859).withOpacity(0.3),
-              //Color(0xFFC83E4D).withOpacity(0.1),
-              const Color(0xFFF4B860).withOpacity(0.1)
-            ],
-          ),
-        ),
-      ),
-      BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: const Color(0xFFF4B860).withOpacity(0.75),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.01),
-                        spreadRadius: 10,
-                        blurRadius: 3,
-                      ),
-                    ]),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 60, right: 20, left: 20, bottom: 20),
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.arrow_back)),
-                      Text(
-                        isActive ? "Active Budgets" : "History",
-                        style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              isActive ? active() : history()
-            ],
-          ),
-        ),
-      ),
-    ]));
-  }
-
-  Widget active() {
-    return Column(
-      children: [],
-    );
-  }
-
-  Widget history() {
-    return Center(
-      child: Column(
-        children: [
-          Text("Start Date: ${snapshot.data!.docs[index]['Start Date']}"),
-          Text("End Date: ${snapshot.data!.docs[index]['End Date']}"),
-          Text("Category: ${snapshot.data!.docs[index]['Category']}"),
-          Text("Limit: ${snapshot.data!.docs[index]['Limit']}"),
-          Text(
-              "Current Amount: ${snapshot.data!.docs[index]['Current Amount']}"),
-        ],
-      ),
-    );
-  }
 }

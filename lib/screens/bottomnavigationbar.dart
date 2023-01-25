@@ -28,8 +28,8 @@ class _BottomState extends State<Bottom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       extendBody: true,
+      resizeToAvoidBottomInset: false,
       body: Screen[index_color],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -39,12 +39,12 @@ class _BottomState extends State<Bottom> {
             },
           );
         },
-        child: const Icon(Icons.add),
         backgroundColor: const Color(0xFFF4B860),
+        child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        color: Colors.grey.withOpacity(0.05),
+        color: Colors.black.withOpacity(0.1),
         shape: const CircularNotchedRectangle(),
         child: Padding(
           padding: const EdgeInsets.only(top: 7.5, bottom: 7.5),

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Chart extends StatefulWidget {
   const Chart({Key? key}) : super(key: key);
@@ -107,17 +108,97 @@ class _ChartState extends State<Chart> {
 }
 
 Widget ShimmerLoading() {
-  return Column(children: [
-    AspectRatio(
-        aspectRatio: 1,
-        child: Card(
-          elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          color: Colors.grey.withOpacity(0.1),
-          child: Container(),
-        )),
-    const SizedBox(height: 20),
-  ]);
+  Map graphData = {
+    '1': {"income": '45', "expense": '82'},
+    '2': {'income': '66', 'expense': '92'},
+    '3': {'income': '10', 'expense': '50'},
+    '4': {'income': '100', 'expense': '90'},
+    '5': {'income': '0.00', 'expense': '13.00'},
+    '6': {'income': '90', 'expense': '37'},
+    '7': {'income': '52', 'expense': '19'}
+  };
+  return Expanded(
+      child: Shimmer(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              const Color(0xFFC83E4D).withOpacity(0.1),
+              const Color(0xFFF4B860).withOpacity(0.2),
+              const Color(0xFF4A5859).withOpacity(0.3),
+            ],
+          ),
+          child: Column(children: [
+            const SizedBox(height: 10),
+            AspectRatio(
+                aspectRatio: 1,
+                child: Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4)),
+                  color: const Color(0xFF4A5859).withOpacity(0.2),
+                  child: barChart(graphData: graphData),
+                )),
+            const SizedBox(height: 20),
+            Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                height: 20,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 20,
+                      width: 180,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ],
+                )),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(0),
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      title: Container(
+                        height: 20,
+                        width: 10,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      subtitle: Container(
+                        height: 20,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      trailing: Container(
+                        height: 20,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    );
+                  }),
+            )
+          ])));
 }
 
 Widget makeTransactionsIcon() {

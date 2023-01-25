@@ -305,7 +305,7 @@ class _UpdateBudgetScreenState extends State<UpdateBudgetScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: (size.width - 140),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

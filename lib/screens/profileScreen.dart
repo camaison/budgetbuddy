@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatelessWidget {
   late double income;
@@ -15,6 +16,11 @@ class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
   static late String name = '';
   static late String email = '';
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
 
   Widget ProfilePic() {
     String picUrl = '';
@@ -128,7 +134,7 @@ class ProfileScreen extends StatelessWidget {
                 income = data['income'].toDouble();
                 expense = data['expense'].toDouble();
 
-                double percent = income == 0
+                double percent = income <= 0
                     ? 0
                     : (income - expense) / income <= 0
                         ? 0
@@ -323,40 +329,43 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(height: kSpacingUnit.w * 2),
                 const SizedBox(height: 30),
                 GestureDetector(
-                  child: Container(
-                    height: kSpacingUnit.w * 5.5,
-                    margin: EdgeInsets.symmetric(
-                      horizontal: kSpacingUnit.w * 4,
-                    ).copyWith(
-                      bottom: kSpacingUnit.w * 2,
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: kSpacingUnit.w * 2,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(kSpacingUnit.w * 3),
-                      color: const Color(0xFF4A5859).withOpacity(0.2),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.request_quote,
-                          size: kSpacingUnit.w * 2.5,
-                        ),
-                        SizedBox(width: kSpacingUnit.w * 1.5),
-                        Text(
-                          'Feature Request',
-                          style: kTitleTextStyle.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                    child: Container(
+                      height: kSpacingUnit.w * 5.5,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: kSpacingUnit.w * 4,
+                      ).copyWith(
+                        bottom: kSpacingUnit.w * 2,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: kSpacingUnit.w * 2,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(kSpacingUnit.w * 3),
+                        color: const Color(0xFF4A5859).withOpacity(0.2),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.request_quote,
+                            size: kSpacingUnit.w * 2.5,
                           ),
-                        ),
-                        const Spacer(),
-                      ],
+                          SizedBox(width: kSpacingUnit.w * 1.5),
+                          Text(
+                            'Feature Request',
+                            style: kTitleTextStyle.copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
                     ),
-                  ),
-                  onTap: () {},
-                ),
+                    onTap: () {
+                      Uri _url = Uri.parse(
+                          'https://docs.google.com/forms/d/e/1FAIpQLSdjZWZsCKkFmWqtLZrGaerNKCIBXu6UdCJGZnkCZr2C8Yvfgg/viewform?usp=sf_link}');
+                      _launchUrl(_url);
+                    }),
                 const SizedBox(height: 10),
                 GestureDetector(
                   child: Container(
@@ -393,7 +402,11 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Uri _url = Uri.parse(
+                        'https://docs.google.com/forms/d/e/1FAIpQLSfOr3ClKRy1PPzBlcttcOQCZbgQSHKobQPrGubsXXXnt-InWw/viewform?usp=sf_link');
+                    _launchUrl(_url);
+                  },
                 ),
                 const SizedBox(height: 10),
                 GestureDetector(
@@ -429,7 +442,11 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Uri _url =
+                        Uri.parse('https://github.com/camaison/budgetbuddy');
+                    _launchUrl(_url);
+                  },
                 ),
                 const SizedBox(height: 10),
                 GestureDetector(
@@ -459,9 +476,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(width: kSpacingUnit.w * 1.5),
                         Text(
-                          //LineAwesomeIcons.alternate_sign_out,
                           'Logout',
-
                           style: kTitleTextStyle.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: 18,

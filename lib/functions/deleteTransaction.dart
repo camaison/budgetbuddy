@@ -13,8 +13,13 @@ class DeleteTransaction {
   final String category;
   final Function? init;
 
-  DeleteTransaction(this.id, this.amount, this.isIncome, this.dateTime,
-      this.category, this.init) {
+  DeleteTransaction(
+      {required this.id,
+      required this.amount,
+      required this.isIncome,
+      required this.dateTime,
+      required this.category,
+      this.init}) {
     WeekManager.checkWeek();
     RefactorInactiveBudgets();
     deleteFromTransactions();
@@ -48,6 +53,10 @@ class DeleteTransaction {
             },
           SetOptions(merge: true)
         });
+    SortData.allData[dateTime.year.toString()][dateTime.month.toString()]
+            [dateTime.day.toString()]
+        .remove(id);
+
     transactions
         .collection(dateTime.year.toString())
         .doc(dateTime.month.toString())

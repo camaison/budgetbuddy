@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class SortData {
   final AsyncSnapshot<DocumentSnapshot> snapshot;
   static Map allData = {};
+  static List years = [];
   static List recentData = [];
   static int index = 0;
   static bool loading = true;
@@ -27,28 +28,51 @@ class SortData {
     if ((snapshot.data?['recent']).length == 0) {
       loading = false;
     }
-    List years = snapshot.data!['years'];
+    years = snapshot.data!['years'];
     if (allData.isEmpty || recentData.isEmpty) {
       recentData = snapshot.data!['recent'];
       for (String year in years) {
         snapshot.data!.reference.collection(year).get().then((value) {
           Map tempData = {};
           for (DocumentSnapshot doc in value.docs) {
-            tempData.addAll({doc.id: doc.data()});
+            Map nonEmptyData = {};
+            (doc.data() as Map).forEach((key, value) {
+              value.isNotEmpty ? nonEmptyData.addAll({key: value}) : null;
+            });
+            if (nonEmptyData.isNotEmpty) {
+              tempData.addAll({doc.id: nonEmptyData});
+            }
           }
-          allData.addAll({year: tempData});
-          //menuData.addAll({year: tempData.keys.toList()});
+          if (tempData.isNotEmpty) {
+            allData.addAll({year: tempData});
+          }
         });
       }
     }
-    years.sort((a, b) => b.compareTo(a));
-    if (allData.isNotEmpty) {
-      loading = false;
-    }
-    yearMenu = ["Year", ...years];
-
-    print({
-      "Current Year: $currentYear, Current Month: $currentMonthIndex, Current Day: $currentDay"
+    allData.forEach((year, value) {
+      if (value.isEmpty) {
+        allData.remove(year);
+      } else {
+        allData[year].forEach((month, value) {
+          if (value.isEmpty) {
+            allData[year].remove(month);
+          } else {
+            allData[year][month].forEach((day, value) {
+              if (value.isEmpty) {
+                allData[year][month].remove(day);
+              }
+            });
+          }
+        });
+      }
+    });
+    Future.delayed(const Duration(seconds: 2), () {
+      years = allData.keys.toList();
+      years.sort((a, b) => b.compareTo(a));
+      if (allData.isNotEmpty) {
+        loading = false;
+      }
+      yearMenu = ["Year", ...years];
     });
   }
   static RecentTransactions() {

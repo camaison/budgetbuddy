@@ -20,28 +20,6 @@ class RefactorInactiveBudgets {
                     .data()['End Date']
                     .toDate()
                     .isBefore(DateTime.now())) {
-                  double score = ((budget['End Date']
-                                      .toDate()
-                                      .difference(budget['Start Date'].toDate())
-                                      .inHours /
-                                  24)
-                              .round() *
-                          (budget['Limit'] - budget['Current Amount']) /
-                          100)
-                      .round();
-                  budgets
-                      .get()
-                      .then((value) => {
-                            budgets.set({
-                              'score': value['score'] + score,
-                            }),
-                          })
-                      .then((value) {
-                    budgets
-                        .collection("inactive")
-                        .doc(budget.id)
-                        .set({'score': score}, SetOptions(merge: true));
-                  });
                   budgets
                       .collection("inactive")
                       .doc(budget.id)

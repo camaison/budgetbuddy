@@ -27,154 +27,147 @@ class HomeState extends State<Home> {
   List data = [];
   List expenseList = [];
 
+  static bool isPopped = false;
+
   @override
   Widget build(context) {
-    return RefreshIndicator(
-      onRefresh: () {
-        return Future.delayed(const Duration(seconds: 1), () {
-          print("Refreshed");
-        });
-      },
-      child: Scaffold(
-        body: Stack(children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  const Color(0xFFF4B860).withOpacity(0.2),
+    return Scaffold(
+      body: Stack(children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color(0xFFF4B860).withOpacity(0.2),
 
-                  const Color(0xFF4A5859).withOpacity(0.3),
+                const Color(0xFF4A5859).withOpacity(0.3),
 
-                  //const Color(0xFF4A5859).withOpacity(0.3),
-                  //Color(0xFFC83E4D).withOpacity(0.1),
-                  // const Color(0xFFF4B860).withOpacity(0.1)
+                //const Color(0xFF4A5859).withOpacity(0.3),
+                //Color(0xFFC83E4D).withOpacity(0.1),
+                // const Color(0xFFF4B860).withOpacity(0.1)
+              ],
+            ),
+          ),
+        ),
+        BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+          child: SafeArea(
+            top: false,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Head(),
+                  const SizedBox(height: 20),
+                  StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection(FirebaseAuth.instance.currentUser!.uid)
+                        .doc('transactions')
+                        .get()
+                        .asStream(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      WeekManager.getWeekInfo(DateTime(
+                          DateTime.now().year, DateTime.now().month, 31));
+                      if (snapshot.hasError) {
+                        return const SnackBar(
+                            content: Text('Something went wrong'),
+                            backgroundColor: Colors.red,
+                            duration: Duration(seconds: 3),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))));
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting ||
+                          snapshot.data?.data() == null) {
+                        return ShimmerLoading();
+                      }
+                      List recentData = [];
+                      Map requiredTransactions = {'income': 0, 'expense': 0};
+
+                      if (snapshot.data?.data() != null) {
+                        requiredTransactions = snapshot.data?.data() as Map;
+                        recentData = requiredTransactions != null
+                            ? requiredTransactions['recent']
+                            : [];
+                      }
+                      // return a scrollable column
+                      return Column(
+                        children: [
+                          Card(requiredTransactions),
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Recent Transactions',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      color: Colors.white70,
+                                    )),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const AllTransactions()));
+                                    SortData.index = 0;
+                                    SortData.isDisplayIncome = false;
+                                    SortData.isDisplayExpense = false;
+                                    SortData.isYear = false;
+                                    SortData.yearHint = 'Year';
+                                    SortData.monthHint = 'Month';
+                                    SortData.dayHint = 'Day';
+                                    SortData.currentDay = 0;
+                                    SortData.currentMonthIndex = 0;
+                                    SortData.currentYear = '';
+                                    SortData.isYear = false;
+                                  },
+                                  child: const Text(
+                                    'See all',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                      color: Color(0xFFF4B860),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          recentData.length > 0
+                              ? SizedBox(
+                                  //margin: EdgeInsets.only(left: 5, right: 5),
+                                  height: 400,
+                                  child: TransactionsBlock(recentData))
+                              : const SizedBox(
+                                  height: 390,
+                                  child: Center(
+                                      child: Text(
+                                    "No Transactions",
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ))),
+                          const SizedBox(height: 5),
+                        ],
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
           ),
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-            child: SafeArea(
-              top: false,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Head(),
-                    const SizedBox(height: 20),
-                    StreamBuilder<DocumentSnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection(FirebaseAuth.instance.currentUser!.uid)
-                          .doc('transactions')
-                          .get()
-                          .asStream(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        WeekManager.getWeekInfo(DateTime(
-                            DateTime.now().year, DateTime.now().month, 31));
-                        if (snapshot.hasError) {
-                          return const SnackBar(
-                              content: Text('Something went wrong'),
-                              backgroundColor: Colors.red,
-                              duration: Duration(seconds: 3),
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))));
-                        }
-
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return ShimmerLoading();
-                        }
-                        List recentData = [];
-                        Map requiredTransactions = {'income': 0, 'expense': 0};
-
-                        if (snapshot.data?.data() != null) {
-                          requiredTransactions = snapshot.data?.data() as Map;
-                          recentData = requiredTransactions != null
-                              ? requiredTransactions['recent']
-                              : [];
-                        }
-                        // return a scrollable column
-                        return Column(
-                          children: [
-                            Card(requiredTransactions),
-                            const SizedBox(height: 20),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('Recent Transactions',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18,
-                                        color: Colors.white70,
-                                      )),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const AllTransactions()));
-                                      SortData.index = 0;
-                                      SortData.isDisplayIncome = false;
-                                      SortData.isDisplayExpense = false;
-                                      SortData.isYear = false;
-                                      SortData.yearHint = 'Year';
-                                      SortData.monthHint = 'Month';
-                                      SortData.dayHint = 'Day';
-                                      SortData.currentDay = 0;
-                                      SortData.currentMonthIndex = 0;
-                                      SortData.currentYear = '';
-                                      SortData.isYear = false;
-                                    },
-                                    child: const Text(
-                                      'See all',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 15,
-                                        color: Color(0xFFF4B860),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            recentData.length > 0
-                                ? SizedBox(
-                                    //margin: EdgeInsets.only(left: 5, right: 5),
-                                    height: 400,
-                                    child: TransactionsBlock(recentData))
-                                : const SizedBox(
-                                    height: 390,
-                                    child: Center(
-                                        child: Text(
-                                      "No Transactions",
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ))),
-                            const SizedBox(height: 5),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 

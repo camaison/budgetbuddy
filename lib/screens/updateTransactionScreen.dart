@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:budgetbuddy/functions/addTransaction.dart';
 import 'package:budgetbuddy/functions/create_budget_json.dart';
 import 'package:budgetbuddy/functions/deleteTransaction.dart';
-import 'package:budgetbuddy/functions/updateTransactions.dart';
+import 'package:budgetbuddy/screens/bottomnavigationbar.dart';
 import 'package:flutter/material.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
@@ -57,7 +57,7 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
   final bool initialIsincome;
   final String initialCategory;
   final String initialTransactionId;
-  bool _isIncome = true;
+  late bool _isIncome = initialIsincome;
   late DateTime _dateTime = initialDateTime;
   late String _amount;
   late String _title;
@@ -109,7 +109,9 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                         children: [
                           IconButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.pop(
+                                  context,
+                                );
                               },
                               icon: const Icon(Icons.arrow_back)),
                           const Text(
@@ -125,14 +127,14 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
+              const Padding(
+                padding: EdgeInsets.only(left: 20, right: 20, top: 30),
                 child: Text(
                   "Choose Category",
                   style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white.withOpacity(0.5)),
+                      color: Colors.grey),
                 ),
               ),
               const SizedBox(
@@ -226,7 +228,10 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xff67727d)),
+                              color: Colors.grey),
+                        ),
+                        const SizedBox(
+                          height: 15,
                         ),
                         Row(
                           children: [
@@ -306,9 +311,9 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                         const Text(
                           "Transaction Name",
                           style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xff67727d)),
+                              color: Colors.grey),
                         ),
                         TextFormField(
                           cursorColor: Colors.white,
@@ -326,6 +331,14 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                           },
                         ),
                         const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          height: 1.0,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(
                           height: 20,
                         ),
                         Row(
@@ -338,9 +351,9 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                   const Text(
                                     "Enter Amount",
                                     style: TextStyle(
-                                        fontSize: 17,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xff67727d)),
+                                        color: Colors.grey),
                                   ),
                                   TextFormField(
                                     cursorColor: Colors.black,
@@ -375,30 +388,64 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                     color: const Color(0xFFF4B860),
                                     borderRadius: BorderRadius.circular(15)),
                                 child: IconButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (!_transactionKey.currentState!
                                         .validate()) {
                                       return;
                                     }
                                     _transactionKey.currentState!.save();
-                                    AddTransaction(
-                                      title: _title,
-                                      amount: _amount,
-                                      isIncome: _isIncome,
-                                      dateTime: _dateTime,
-                                      category:
-                                          transactionCategories[activeCategory]
-                                              ['name'],
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return Scaffold(
+                                            backgroundColor: Colors.transparent,
+                                            body: Center(
+                                                child: Column(children: const [
+                                              SizedBox(
+                                                height: 200,
+                                              ),
+                                              CircularProgressIndicator(
+                                                color: Colors.orangeAccent,
+                                              ),
+                                              Text(
+                                                "Updating Transaction...",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                ),
+                                              )
+                                            ])),
+                                          );
+                                        });
+                                    Future.delayed(
+                                      const Duration(seconds: 2),
+                                      () {
+                                        AddTransaction(
+                                            title: _title,
+                                            amount: _amount,
+                                            dateTime: _dateTime,
+                                            isIncome: _isIncome,
+                                            category: transactionCategories[
+                                                activeCategory]['name']);
+                                      },
                                     );
-                                    UpdateTransaction(
-                                        title: initialTitle,
-                                        amount: initialAmount,
+                                    DeleteTransaction(
+                                        id: initialTransactionId,
                                         isIncome: initialIsincome,
+                                        amount: initialAmount,
                                         dateTime: initialDateTime,
                                         category: initialCategory,
-                                        id: initialTransactionId,
                                         init: null);
-                                    Navigator.pop(context);
+
+                                    Future.delayed(const Duration(seconds: 3),
+                                        () {
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Bottom()),
+                                          (route) => false);
+                                    });
 
                                     _transactionKey.currentState!.reset();
                                   },

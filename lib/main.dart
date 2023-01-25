@@ -32,7 +32,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(
-            primarySwatch: Colors.red,
+            primarySwatch: Colors.orange,
             fontFamily: 'Montserrat',
             brightness: Brightness.dark,
             scaffoldBackgroundColor: Colors.black,
@@ -41,7 +41,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
             snackBarTheme: const SnackBarThemeData(
                 contentTextStyle: TextStyle(color: Colors.white)),
             colorScheme: ColorScheme.fromSwatch().copyWith(
-                secondary: const Color(0xFF4549BC),
+                secondary: const Color(0xFFFFC107),
                 brightness: Brightness.dark)),
         /*ThemeData(
           primarySwatch: Colors.red,
@@ -57,7 +57,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
               brightness: Brightness.light),
         ),*/
         darkTheme: ThemeData(
-            primarySwatch: Colors.red,
+            primarySwatch: Colors.orange,
             fontFamily: 'Montserrat',
             brightness: Brightness.dark,
             scaffoldBackgroundColor: Colors.black,
@@ -66,10 +66,10 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
             snackBarTheme: const SnackBarThemeData(
                 contentTextStyle: TextStyle(color: Colors.white)),
             colorScheme: ColorScheme.fromSwatch().copyWith(
-                secondary: const Color(0xFF4549BC),
+                secondary: const Color(0xFFFFC107),
                 brightness: Brightness.dark)),
         debugShowCheckedModeBanner: false,
-        color: const Color(0xFF4549BC),
+        color: const Color(0xFFFFC107),
         title: 'Budget Buddy',
         home: const CheckAuth());
   }
@@ -79,50 +79,3 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
   }
 }
-
-
-
-
-
-
-
-
-
-
-/*import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_loginuispeedcode/imported_lib/data/model/add_date.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'auth/login.dart';
-
-void main() async {
-  await Hive.initFlutter();
-  Hive.registerAdapter(AdddataAdapter());
-  await Hive.openBox<Add_data>('data');
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
-      // darkTheme: ThemeData(
-      //   toggleableActiveColor: Color.fromRGBO(247, 35, 66, 1),
-      //   //visualDensity: VisualDensity.adaptivePlatformDensity,
-      //   colorScheme: ColorScheme.dark(
-      //     primary: Color.fromRGBO(247, 35, 66, 1),
-      //   ),
-      // ),
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.red,
-        fontFamily: 'Montserrat',
-      ),
-    );
-  }
-}
-*/

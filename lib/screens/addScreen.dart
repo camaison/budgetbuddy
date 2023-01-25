@@ -304,6 +304,9 @@ class _AddNewState extends State<AddNew> {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Container(
                         color: Colors.white, height: 1, width: double.infinity),
                     const SizedBox(
@@ -330,6 +333,9 @@ class _AddNewState extends State<AddNew> {
                       onSaved: (String? input) {
                         _title = input.toString();
                       },
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     Container(
                         color: Colors.white, height: 1, width: double.infinity),
@@ -570,7 +576,7 @@ class _AddNewState extends State<AddNew> {
                                   initialDate: _dateTime,
                                   firstDate: DateTime(2020),
                                   lastDate: DateTime(2100));
-                              if (newDate == Null) return;
+                              if (newDate == null) return;
                               TimeOfDay? newTime = await showTimePicker(
                                   context: context,
                                   initialTime:
@@ -584,7 +590,7 @@ class _AddNewState extends State<AddNew> {
                                   });
                               setState(() {
                                 _dateTime = DateTime(
-                                    newDate!.year,
+                                    newDate.year,
                                     newDate.month,
                                     newDate.day,
                                     newTime!.hour,
@@ -648,6 +654,9 @@ class _AddNewState extends State<AddNew> {
                       onSaved: (String? input) {
                         _title = input.toString();
                       },
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     Container(
                       width: double.infinity,
