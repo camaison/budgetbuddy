@@ -49,21 +49,20 @@ class _StatisticsState extends State<Statistics> {
   custom() {
     return Column(children: [
       Container(
-        decoration: BoxDecoration(color: Color(0xFFF4B860), boxShadow: [
+        decoration: BoxDecoration(color: const Color(0xFFF4B860), boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.01),
             spreadRadius: 10,
             blurRadius: 3,
           ),
         ]),
-        child: Padding(
-          padding:
-              const EdgeInsets.only(top: 60, right: 20, left: 20, bottom: 25),
+        child: const Padding(
+          padding: EdgeInsets.only(top: 60, right: 20, left: 20, bottom: 25),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     "Statistics",
                     style: TextStyle(
@@ -77,7 +76,7 @@ class _StatisticsState extends State<Statistics> {
           ),
         ),
       ),
-      Chart(),
+      const Chart(),
     ]);
   }
 }

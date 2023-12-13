@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:budgetbuddy/database/database_functions.dart';
+import 'package:budgetbuddy/database/transaction_item.dart';
 import 'package:budgetbuddy/functions/addTransaction.dart';
 import 'package:budgetbuddy/functions/create_budget_json.dart';
 import 'package:budgetbuddy/functions/crudFunctions.dart';
@@ -15,6 +17,7 @@ class AddNew extends StatefulWidget {
 }
 
 class _AddNewState extends State<AddNew> {
+  final DatabaseFunctions _dbFunctions = DatabaseFunctions.instance;
   int activeCategoryBudgets = 0;
   int activeCategoryTransactions = 0;
   late String title;
@@ -23,12 +26,44 @@ class _AddNewState extends State<AddNew> {
   DateTime _dateTime = DateTime.now();
   late String _amount;
   late String _title;
-  late String id;
   late String initialTitle;
   late String initialAmount;
   late var initialDateTime;
   final GlobalKey<FormState> _transactionKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _budgetKey = GlobalKey<FormState>();
+
+  _deletetheDatabase() async {
+    await _dbFunctions.deleteDb();
+  }
+
+  _deleteAllTransactions() async {
+    await _dbFunctions.deleteAllTransactions();
+  }
+
+  _addTransactionItem(
+      {required double amount,
+      required String category,
+      required String type,
+      required String title,
+      required String description}) async {
+    TransactionItem transactionItem = TransactionItem(
+      transactionId: DateTime.now().millisecondsSinceEpoch,
+      dateTime: DateTime.now().toString(),
+      amount: amount,
+      category: category,
+      type: type,
+      title: title,
+      createdDateTime: DateTime.now().toString(),
+      description: description,
+    );
+    await _dbFunctions.insertTransaction(transactionItem.toMap());
+  }
+
+  _getallTransactions() async {
+    List<Map<String, dynamic>> allTransactions =
+        await _dbFunctions.getTransactionList();
+    print(allTransactions);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -719,14 +754,21 @@ class _AddNewState extends State<AddNew> {
                                   return;
                                 }
                                 _transactionKey.currentState!.save();
-                                AddTransaction(
-                                  title: _title,
-                                  amount: _amount,
-                                  dateTime: _dateTime,
-                                  isIncome: _isIncome,
+                                _addTransactionItem(
+                                  amount: double.parse(_amount),
                                   category: transactionCategories[
                                       activeCategoryTransactions]['name'],
-                                );
+                                  type: _isIncome ? "Income" : "Expense",
+                                  title: _title,
+                                  description: "No Description",
+                                ); // AddTransaction(
+                                //   title: _title,
+                                //   amount: _amount,
+                                //   dateTime: _dateTime,
+                                //   isIncome: _isIncome,
+                                //   category: transactionCategories[
+                                //       activeCategoryTransactions]['name'],
+                                // );
                                 _transactionKey.currentState!.reset();
                               },
                               icon: const Icon(Icons.arrow_forward),

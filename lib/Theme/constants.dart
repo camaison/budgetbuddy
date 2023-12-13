@@ -31,7 +31,7 @@ final kDarkTheme = ThemeData(
   primaryColor: kDarkPrimaryColor,
   canvasColor: kDarkPrimaryColor,
   backgroundColor: kDarkSecondaryColor,
-  accentColor: kAccentColor,
+  hintColor: kAccentColor,
   iconTheme: ThemeData.dark().iconTheme.copyWith(
         color: kLightSecondaryColor,
       ),
@@ -48,7 +48,7 @@ final kLightTheme = ThemeData(
   primaryColor: kLightPrimaryColor,
   canvasColor: kLightPrimaryColor,
   backgroundColor: kLightSecondaryColor,
-  accentColor: kAccentColor,
+  hintColor: kAccentColor,
   iconTheme: ThemeData.light().iconTheme.copyWith(
         color: kDarkSecondaryColor,
       ),

@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:budgetbuddy/database/database_functions.dart';
+import 'package:budgetbuddy/database/transaction_item.dart';
 import 'package:budgetbuddy/functions/addTransaction.dart';
 import 'package:budgetbuddy/functions/create_budget_json.dart';
 import 'package:budgetbuddy/functions/deleteTransaction.dart';
@@ -36,6 +38,23 @@ class UpdateTransactionScreen extends StatefulWidget {
 }
 
 class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
+  final DatabaseFunctions _dbFunctions = DatabaseFunctions.instance;
+  _updateTransaction() async {
+    await _dbFunctions.updateTransaction(
+      TransactionItem(
+        transactionId: int.parse(initialTransactionId),
+        dateTime: _dateTime.toString(),
+        amount: double.parse(_amount),
+        category: transactionCategories[activeCategory]['name'],
+        type: _isIncome ? 'Income' : 'Expense',
+        title: _title,
+        createdDateTime: DateTime.now().toString(),
+        description: '',
+      ).toMap(),
+      int.parse(initialTransactionId),
+    );
+  }
+
   _UpdateTransactionScreenState(
     this.initialTitle,
     this.initialAmount,
@@ -397,10 +416,10 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                     showDialog(
                                         context: context,
                                         builder: (context) {
-                                          return Scaffold(
+                                          return const Scaffold(
                                             backgroundColor: Colors.transparent,
                                             body: Center(
-                                                child: Column(children: const [
+                                                child: Column(children: [
                                               SizedBox(
                                                 height: 200,
                                               ),
@@ -417,35 +436,22 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                             ])),
                                           );
                                         });
-                                    Future.delayed(
-                                      const Duration(seconds: 2),
-                                      () {
-                                        AddTransaction(
-                                            title: _title,
-                                            amount: _amount,
-                                            dateTime: _dateTime,
-                                            isIncome: _isIncome,
-                                            category: transactionCategories[
-                                                activeCategory]['name']);
-                                      },
-                                    );
-                                    DeleteTransaction(
-                                        id: initialTransactionId,
-                                        isIncome: initialIsincome,
-                                        amount: initialAmount,
-                                        dateTime: initialDateTime,
-                                        category: initialCategory,
-                                        init: null);
+                                    // Future.delayed(
+                                    //   const Duration(seconds: 2),
+                                    //   () {
+                                    _updateTransaction();
+                                    //   },
+                                    // );
 
-                                    Future.delayed(const Duration(seconds: 3),
-                                        () {
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Bottom()),
-                                          (route) => false);
-                                    });
+                                    // Future.delayed(const Duration(seconds: 3),
+                                    //     () {
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Bottom()),
+                                        (route) => false);
+                                    //   });
 
                                     _transactionKey.currentState!.reset();
                                   },

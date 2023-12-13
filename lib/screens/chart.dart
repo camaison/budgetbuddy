@@ -1,7 +1,5 @@
 import 'dart:math';
 import 'package:budgetbuddy/widgets/transaction_tile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:shimmer/shimmer.dart';
@@ -16,96 +14,96 @@ class Chart extends StatefulWidget {
 class _ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection(FirebaseAuth.instance.currentUser!.uid)
-            .doc('statistics')
-            .get()
-            .asStream(),
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasData) {
-            Map graphData = snapshot.data!.data() as Map;
-            List weekTransactions = graphData['transactions'] != null
-                ? graphData['transactions'].reversed.toList()
-                : [];
+    Map graphData = {};
+    List weekTransactions = [];
 
-            return Expanded(
-              child: SingleChildScrollView(
-                child: Column(children: [
-                  const SizedBox(height: 10),
-                  AspectRatio(
-                      aspectRatio: 1,
-                      child: Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)),
-                        color: const Color(0xFF4A5859).withOpacity(0.2),
-                        child: barChart(graphData: graphData['thisWeek']),
-                      )),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          "This Week's Transactions",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  weekTransactions != null || weekTransactions.isNotEmpty
-                      ? SizedBox(
-                          height: 365,
-                          child: Scrollbar(
-                            interactive: true,
-                            child: ListView.builder(
-                                padding: const EdgeInsets.all(0),
-                                shrinkWrap: true,
-                                itemCount: weekTransactions.length,
-                                itemBuilder: (context, index) {
-                                  List keys =
-                                      weekTransactions[index].keys.toList();
-                                  List values =
-                                      weekTransactions[index].values.toList();
+    // return StreamBuilder(
+    //     stream: FirebaseFirestore.instance
+    //         .collection(FirebaseAuth.instance.currentUser!.uid)
+    //         .doc('statistics')
+    //         .get()
+    //         .asStream(),
+    //     builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    //       if (snapshot.hasData) {
+    //         Map graphData = snapshot.data!.data() as Map;
+    //         List weekTransactions = graphData['transactions'] != null
+    //             ? graphData['transactions'].reversed.toList()
+    //             : [];
 
-                                  return TransactionTile(
-                                    transactionName: values[0]['Title'],
-                                    money: values[0]['Amount'],
-                                    dateTime:
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            values[0]['Date']
-                                                .millisecondsSinceEpoch),
-                                    isIncome: values[0]['isIncome'],
-                                    transactionId: keys[0],
-                                    category: values[0]['Category'],
-                                  );
-                                }),
-                          ))
-                      : const SizedBox(
-                          height: 200,
-                          child: Center(
-                              child: Text(
-                            "No Transactions",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ))),
-                ]),
-              ),
-            );
-          } else {
-            return ShimmerLoading();
-          }
-        });
+    //         return
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(children: [
+          const SizedBox(height: 10),
+          AspectRatio(
+              aspectRatio: 1,
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
+                color: const Color(0xFF4A5859).withOpacity(0.2),
+                child: Text(''),
+                // child: barChart(graphData: graphData['thisWeek']),
+              )),
+          const SizedBox(height: 20),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "This Week's Transactions",
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          weekTransactions.isNotEmpty
+              ? SizedBox(
+                  height: 365,
+                  child: Scrollbar(
+                    interactive: true,
+                    child: ListView.builder(
+                        padding: const EdgeInsets.all(0),
+                        shrinkWrap: true,
+                        itemCount: weekTransactions.length,
+                        itemBuilder: (context, index) {
+                          List keys = weekTransactions[index].keys.toList();
+                          List values = weekTransactions[index].values.toList();
+
+                          return TransactionTile(
+                            transactionName: values[0]['Title'],
+                            money: values[0]['Amount'],
+                            dateTime: DateTime.fromMillisecondsSinceEpoch(
+                                values[0]['Date'].millisecondsSinceEpoch),
+                            isIncome: values[0]['isIncome'],
+                            transactionId: keys[0],
+                            category: values[0]['Category'],
+                          );
+                        }),
+                  ))
+              : const SizedBox(
+                  height: 200,
+                  child: Center(
+                      child: Text(
+                    "No Transactions",
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ))),
+        ]),
+      ),
+    );
   }
 }
+// } else {
+//   return ShimmerLoading();
+// }
 
 Widget ShimmerLoading() {
   Map graphData = {

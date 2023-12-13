@@ -1,7 +1,8 @@
+import 'package:budgetbuddy/database/database_functions.dart';
+import 'package:budgetbuddy/database/transaction_item.dart';
 import 'package:budgetbuddy/functions/crudFunctions.dart';
 import 'package:budgetbuddy/functions/deleteTransaction.dart';
 import 'package:budgetbuddy/screens/bottomnavigationbar.dart';
-import 'package:budgetbuddy/screens/home.dart';
 import 'package:budgetbuddy/screens/updateTransactionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -10,10 +11,10 @@ class TransactionTile extends StatelessWidget {
   final String transactionName;
   final String money;
   final bool isIncome;
-  final String transactionId;
+  final int transactionId;
   final DateTime dateTime;
   final String category;
-  const TransactionTile({
+  TransactionTile({
     super.key,
     required this.transactionName,
     required this.money,
@@ -22,6 +23,11 @@ class TransactionTile extends StatelessWidget {
     required this.dateTime,
     required this.category,
   });
+  final DatabaseFunctions _dbFunctions = DatabaseFunctions.instance;
+
+  _deleteTransaction() async {
+    await _dbFunctions.deleteTransaction(transactionId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +55,8 @@ class TransactionTile extends StatelessWidget {
                                       initialTitle: transactionName,
                                       initialAmount: money,
                                       initialIsincome: isIncome,
-                                      initialTransactionId: transactionId,
+                                      initialTransactionId:
+                                          transactionId.toString(),
                                       initialDateTime: dateTime,
                                       initialCategory: category,
                                     )));
@@ -113,23 +120,16 @@ class TransactionTile extends StatelessWidget {
                                                 ])),
                                               );
                                             });
-                                        DeleteTransaction(
-                                          id: transactionId,
-                                          amount: money,
-                                          isIncome: isIncome,
-                                          dateTime: dateTime,
-                                          category: category,
-                                          init: null,
-                                        );
-                                        Future.delayed(
-                                            const Duration(seconds: 2), () {
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const Bottom()),
-                                              (route) => false);
-                                        });
+                                        _deleteTransaction();
+                                        // Future.delayed(
+                                        //     const Duration(seconds: 2), () {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Bottom()),
+                                            (route) => false);
+                                        // });
                                       },
                                       child: const Text(
                                         'Delete',
