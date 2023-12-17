@@ -10,6 +10,7 @@ import '../functions/getGreeting.dart';
 import '../widgets/transaction_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:budgetbuddy/backup/backup_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -82,11 +83,18 @@ class HomeState extends State<Home> {
                                     )),
                                 GestureDetector(
                                   onTap: () {
+                                    //Open Backup Screen
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const AllTransactions()));
+                                                BackupPage()));
+
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             const AllTransactions()));
                                     SortData.index = 0;
                                     SortData.isDisplayIncome = false;
                                     SortData.isDisplayExpense = false;

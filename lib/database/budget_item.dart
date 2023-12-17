@@ -4,9 +4,10 @@ class BudgetItem {
   double currentAmount;
   String startDate;
   String endDate;
-  double limit;
+  double budget_limit;
   String title;
   String status;
+  String description;
 
   BudgetItem({
     required this.budgetId,
@@ -14,9 +15,10 @@ class BudgetItem {
     required this.currentAmount,
     required this.startDate,
     required this.endDate,
-    required this.limit,
+    required this.budget_limit,
     required this.title,
     required this.status,
+    required this.description,
   });
 
   factory BudgetItem.fromMap(Map<String, dynamic> map) {
@@ -26,9 +28,10 @@ class BudgetItem {
       currentAmount: map['current_amount'],
       startDate: map['start_date'],
       endDate: map['end_date'],
-      limit: map['limit'],
+      budget_limit: map['budget_limit'],
       title: map['title'],
       status: map['status'],
+      description: map['description'],
     );
   }
 
@@ -39,9 +42,10 @@ class BudgetItem {
       'current_amount': currentAmount,
       'start_date': startDate,
       'end_date': endDate,
-      'limit': limit,
+      'budget_limit': budget_limit,
       'title': title,
       'status': status,
+      'description': description,
     };
   }
 }

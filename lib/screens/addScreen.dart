@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:budgetbuddy/database/budget_item.dart';
 import 'package:budgetbuddy/database/database_functions.dart';
 import 'package:budgetbuddy/database/transaction_item.dart';
 import 'package:budgetbuddy/functions/addTransaction.dart';
@@ -38,6 +39,30 @@ class _AddNewState extends State<AddNew> {
 
   _deleteAllTransactions() async {
     await _dbFunctions.deleteAllTransactions();
+  }
+
+  _addBudgetItem({
+    required String category,
+    required double currentAmount,
+    required String startDate,
+    required String endDate,
+    required double limit,
+    required String title,
+    required String status,
+    required String description,
+  }) async {
+    BudgetItem budgetItem = BudgetItem(
+      budgetId: DateTime.now().millisecondsSinceEpoch,
+      category: category,
+      currentAmount: currentAmount,
+      startDate: startDate,
+      endDate: endDate,
+      budget_limit: limit,
+      title: title,
+      status: status,
+      description: description,
+    );
+    await _dbFunctions.insertBudget(budgetItem.toMap());
   }
 
   _addTransactionItem(
@@ -429,14 +454,29 @@ class _AddNewState extends State<AddNew> {
                                 if (!_budgetKey.currentState!.validate()) {
                                   return;
                                 }
+                                // _deletetheDatabase();
                                 _budgetKey.currentState!.save();
-                                CreateBudget(
-                                  _title,
-                                  _amount,
-                                  _dateTime,
-                                  budgetCategories[activeCategoryBudgets]
-                                      ['name'],
+                                _addBudgetItem(
+                                  category:
+                                      budgetCategories[activeCategoryBudgets]
+                                          ['name'],
+                                  currentAmount: double.parse(_amount),
+                                  startDate: DateTime.now().toString(),
+                                  endDate: _dateTime.toString(),
+                                  limit: double.parse(_amount),
+                                  title: _title,
+                                  status: "Active",
+                                  description: "No Description",
                                 );
+                                // AddBudget(
+
+                                // CreateBudget(
+                                //   _title,
+                                //   _amount,
+                                //   _dateTime,
+                                //   budgetCategories[activeCategoryBudgets]
+                                //       ['name'],
+                                // );
                                 _budgetKey.currentState!.reset();
                               },
                               icon: const Icon(Icons.arrow_forward),

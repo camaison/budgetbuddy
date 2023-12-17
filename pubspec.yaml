@@ -56,6 +56,9 @@ dependencies:
   url_launcher: ^6.1.8
   sqflite: any
   path_provider: any
+  google_sign_in: ^6.2.1
+  googleapis: ^12.0.0
+  googleapis_auth: ^1.4.1
 
 dev_dependencies:
   flutter_test:

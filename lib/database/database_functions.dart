@@ -46,10 +46,15 @@ class DatabaseFunctions {
     return await openDatabase(path, version: 1, onCreate: _createDb);
   }
 
+  // Method to get the database path
+  Future<String> get databasePath async {
+    return '${await getDatabasesPath()}budget_app.db';
+  }
+
   // Create the database
   void _createDb(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE $budgetTable($colBudgetId INTEGER PRIMARY KEY AUTOINCREMENT, $colCategory TEXT, $colCurrentAmount REAL, $colStartDate TEXT, $colEndDate TEXT, $colLimit REAL, $colTitle TEXT, $colStatus TEXT, $colCreatedDateTime TEXT)');
+        'CREATE TABLE $budgetTable($colBudgetId INTEGER PRIMARY KEY AUTOINCREMENT, $colCategory TEXT, $colCurrentAmount REAL, $colStartDate TEXT, $colEndDate TEXT, $colLimit REAL, $colTitle TEXT, $colStatus TEXT, $colDescription TEXT)');
     await db.execute(
         'CREATE TABLE $transactionTable($colTransactionId INTEGER PRIMARY KEY AUTOINCREMENT, $colDateTime TEXT, $colAmount REAL, $colCategory TEXT, $colType TEXT, $colTitle TEXT, $colCreatedDateTime TEXT, $colDescription TEXT)');
     await db.execute(
@@ -62,7 +67,7 @@ class DatabaseFunctions {
     await deleteDatabase(path);
   }
 
-  // Insert a budget
+// Insert a budget
   Future<int> insertBudget(Map<String, dynamic> budget) async {
     Database db = await this.db;
     return await db.insert(budgetTable, budget);
