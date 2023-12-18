@@ -67,6 +67,20 @@ class DatabaseFunctions {
     await deleteDatabase(path);
   }
 
+  //get all active budgets
+  Future<List<Map<String, dynamic>>> getActiveBudgets() async {
+    Database db = await this.db;
+    return await db
+        .rawQuery('SELECT * FROM $budgetTable WHERE $colStatus = "Active"');
+  }
+
+  //get all inactive budgets
+  Future<List<Map<String, dynamic>>> getInactiveBudgets() async {
+    Database db = await this.db;
+    return await db
+        .rawQuery('SELECT * FROM $budgetTable WHERE $colStatus = "Inactive"');
+  }
+
 // Insert a budget
   Future<int> insertBudget(Map<String, dynamic> budget) async {
     Database db = await this.db;

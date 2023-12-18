@@ -460,7 +460,7 @@ class _AddNewState extends State<AddNew> {
                                   category:
                                       budgetCategories[activeCategoryBudgets]
                                           ['name'],
-                                  currentAmount: double.parse(_amount),
+                                  currentAmount: 0,
                                   startDate: DateTime.now().toString(),
                                   endDate: _dateTime.toString(),
                                   limit: double.parse(_amount),
